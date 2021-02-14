@@ -3,12 +3,9 @@ pipeline {
     tools {
         maven 'M3'
         jdk 'JDK-11'
+        docker 'local-docker'
     }
 
-    environment {
-        registry = 'jwcarman/demo'
-        registryCredential = 'docker'
-    }
     stages {
         stage('CI Build') {
             steps {
@@ -28,8 +25,10 @@ pipeline {
 
         stage('Push Image') {
             steps {
-                script {
-                  docker.push registry + ":$BUILD_NUMBER"
+
+                withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
+                    sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
+                    sh 'docker push docker.io/jwcarman/demo:$BUILD_NUMBER'
                 }
             }
         }
