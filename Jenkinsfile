@@ -22,7 +22,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
-                    sh 'mvn -DskipTests -Dspring-boot.build-image.imageName=docker.io/jwcarman/$POM_VERSION -s $MAVEN_SETTINGS spring-boot:build-image'
+                    sh 'mvn -DskipTests -Dspring-boot.build-image.imageName=docker.io/jwcarman/demo:$POM_VERSION -s $MAVEN_SETTINGS spring-boot:build-image'
                 }
             }
         }
