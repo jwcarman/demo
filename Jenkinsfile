@@ -23,9 +23,12 @@ pipeline {
         }
 
         stage('Push Image') {
-            withDockerRegistry(credentialsId: 'docker') {
-                sh 'docker push docker.io/jwcarman/demo:$BUILD_NUMBER'
+            steps {
+                withDockerRegistry(credentialsId: 'docker') {
+                    sh 'docker push docker.io/jwcarman/demo:$BUILD_NUMBER'
+                }
             }
+
         }
     }
 }
