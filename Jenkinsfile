@@ -8,12 +8,17 @@ pipeline {
     stages {
         stage('CI Build') {
             steps {
-                sh 'mvn -B clean test'
+                configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
+                    sh 'mvn -B -s $MAVEN_SETTINGS clean test'
+                }
             }
         }
+
         stage('Build Image') {
             steps {
-                sh 'mvn -DskipTests -Drevision=$BUILD_NUMBER spring-boot:build-image'
+                configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
+                    sh 'mvn -DskipTests -Drevision=$BUILD_NUMBER -s $MAVEN_SETTINGS spring-boot:build-image'
+                }
             }
         }
     }
