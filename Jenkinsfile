@@ -27,7 +27,7 @@ pipeline {
             steps {
 
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
-                    sh 'VERSION=$(mvn help:evaluate -Drevision=$BUILD_NUMBER -Dexpression=project.version -q -DforceStdout)'
+                    sh 'export VERSION=$(mvn help:evaluate -Drevision=$BUILD_NUMBER -Dexpression=project.version -q -DforceStdout)'
                     sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
                     sh 'docker push docker.io/jwcarman/demo:$VERSION'
                 }
