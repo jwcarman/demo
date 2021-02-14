@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        POM_VERSION = """${sh(returnStdOut: true, script: 'mvn help:evaluate -Drevision=$BUILD_NUMBER -Dexpression=project.version -q -DforceStdout')}""".trim()
+        POM_VERSION = """${sh(returnStdout: true, script: 'mvn help:evaluate -Drevision=$BUILD_NUMBER -Dexpression=project.version -q -DforceStdout')}""".trim()
 
     }
     stages {
