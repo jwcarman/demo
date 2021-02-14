@@ -1,9 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.6.3-jdk-11'
-        }
+    agent any
+    tools {
+        maven 'M3'
+        jdk 'JDK-11'
     }
+
     stages {
         stage('CI Build') {
             steps {
