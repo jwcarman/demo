@@ -5,6 +5,10 @@ pipeline {
         jdk 'JDK-11'
     }
 
+    environment {
+        registry = 'jwcarman/demo'
+        registryCredential = 'docker'
+    }
     stages {
         stage('CI Build') {
             steps {
@@ -24,11 +28,10 @@ pipeline {
 
         stage('Push Image') {
             steps {
-                withDockerRegistry(credentialsId: 'docker') {
-                    sh 'docker push docker.io/jwcarman/demo:$BUILD_NUMBER'
+                script {
+                  docker.push registry + ":$BUILD_NUMBER"
                 }
             }
-
         }
     }
 }
