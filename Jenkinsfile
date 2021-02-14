@@ -6,6 +6,10 @@ pipeline {
         dockerTool 'local-docker'
     }
 
+    environment {
+        POM_VERSION = """${sh(returnStdOut: true, script: 'mvn help:evaluate -Drevision=$BUILD_NUMBER -Dexpression=project.version -q -DforceStdout').trim()}"""
+
+    }
     stages {
         stage('CI Build') {
             steps {
@@ -18,7 +22,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
-                    sh 'mvn -DskipTests -Drevision=$BUILD_NUMBER -s $MAVEN_SETTINGS spring-boot:build-image'
+                    sh 'mvn -DskipTests -Dspring-boot.build-image.imageName=docker.io/jwcarman/$POM_VERSION -s $MAVEN_SETTINGS spring-boot:build-image'
                 }
             }
         }
@@ -28,7 +32,7 @@ pipeline {
 
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
                     sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
-                    sh 'docker push docker.io/jwcarman/demo:$(mvn help:evaluate -Drevision=$BUILD_NUMBER -Dexpression=project.version -q -DforceStdout)'
+                    sh 'docker push docker.io/jwcarman/demo:$POM_VERSION'
                 }
             }
         }
