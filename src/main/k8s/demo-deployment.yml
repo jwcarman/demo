@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: spring-boot
-          image: docker.io/jwcarman/demo:latest
+          image: docker.io/jwcarman/demo:$POM_VERSION
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
