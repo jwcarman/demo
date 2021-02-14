@@ -18,7 +18,7 @@
         <java.version>11</java.version>
         <spring.cloud.version>2020.0.1</spring.cloud.version>
 
-        <spring-boot.build-image.imageName>docker.io/jwcarman/demo:${version}</spring-boot.build-image.imageName>
+        <spring-boot.build-image.imageName>docker.io/jwcarman/demo:${project.version}</spring-boot.build-image.imageName>
     </properties>
     <dependencies>
         <dependency>
@@ -58,11 +58,26 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>build-image</id>
                         <goals>
                             <goal>build-image</goal>
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
