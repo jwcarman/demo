@@ -35,7 +35,9 @@ pipeline {
 
         stage('K8S Deploy') {
             steps {
-                kubernetesDeploy configs: 'src/main/k8s/*.yml', kubeconfigId: 'kubert-config'
+                withKubeConfig(credentialsId: 'kubeconfig-kubert') {
+                    sh 'kubectl apply -f src/main/k8s'
+                }
             }
         }
     }
