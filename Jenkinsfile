@@ -40,7 +40,12 @@ pipeline {
         stage('K8S Deploy') {
             steps {
                 withKubeConfig(credentialsId: 'kubeconfig-kubert') {
-                    sh 'kubectl apply -f src/main/k8s'
+                    sh 'envsubst < src/main/k8s/demo-role.yml | kubectl apply -f -'
+                    sh 'envsubst < src/main/k8s/demo-rolebinding.yml | kubectl apply -f -'
+                    sh 'envsubst < src/main/k8s/demo-configmap.yml | kubectl apply -f -'
+                    sh 'envsubst < src/main/k8s/demo-secret.yml | kubectl apply -f -'
+                    sh 'envsubst < src/main/k8s/demo-service.yml | kubectl apply -f -'
+                    sh 'envsubst < src/main/k8s/demo-deployment.yml | kubectl apply -f -'
                 }
             }
         }
